@@ -21,8 +21,10 @@ import org.springframework.data.repository.CrudRepository;
         Service ↔ Controller: Communicate via DTOs
  */
 public interface CustomerRepository
-        extends CrudRepository<CustomerPO, Integer> {
+        extends BaseRepository<CustomerPO, String> {
 
     CustomerPO findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }
 

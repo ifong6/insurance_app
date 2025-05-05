@@ -49,4 +49,6 @@ public class CustomerPO {
 
     private String updatedAt;
 
+    private String token;
+
 }
