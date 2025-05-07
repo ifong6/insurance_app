@@ -1,8 +1,8 @@
 # API Test Cases: CustomerController
 
 ## 📌 Overview
-Automated test cases for `/customer/signUp` and `/customer/logIn` endpoints.  
-**Test Framework**: JUnit 5 + RestAssured  
+Automated test cases for `/customer/signUp` 
+and `/customer/logIn` endpoints.  
 
 ---
 
