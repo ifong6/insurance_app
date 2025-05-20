@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +21,8 @@ public class UserRegisterRequest {
     @NotBlank @Email
     private String email;
     @NotBlank @Size(min = 8) private String password;
-    private String verificationCode;
-    private String verificationToken;
+//    private String verificationCode;
+//    private String verificationToken;
 }
 
 

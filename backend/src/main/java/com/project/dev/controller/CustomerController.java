@@ -18,32 +18,33 @@ public class CustomerController {
     @Autowired
     private CustomerServiceImpl customerService;
 
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public BaseResponse<SessionCustomerVO> customerSignUp(   //SessionUserVO is to not expose data schema to outside
         @RequestBody UserRegisterRequest request) throws BaseException {
         SessionCustomerVO registeredUser = customerService.signUp(request);
 
-        return new BaseResponse<>(
-                StatusEnum.CREATED.getCode(),
-                StatusEnum.CREATED.getMessage(),
-                "User registered successfully",
-                registeredUser
-        );
+        return BaseResponse.success(registeredUser);
     }
 
-    @PostMapping("/logIn")
-    public BaseResponse<CustomerPO> customerLogIn(   //SessionUserVO is to not expose data schema to outside
+    @PostMapping("/login")
+    public BaseResponse<SessionCustomerVO> customerLogIn(   //SessionUserVO is to not expose data schema to outside
         @RequestBody UserLoginRequest request) throws BaseException {
 
-        CustomerPO existingCustomer = customerService.logIn(request);
+        SessionCustomerVO existingCustomer = customerService.logIn(request);
 
-        return new BaseResponse<>(
-                StatusEnum.CREATED.getCode(),
-                StatusEnum.CREATED.getMessage(),
-                "User is now logged in",
-                existingCustomer
-        );
+        return BaseResponse.ok(existingCustomer);
     }
+
+    @PostMapping("/logout")
+    public String customerLogOut(   //SessionUserVO is to not expose data schema to outside
+        @RequestBody UserLoginRequest request) throws BaseException {
+
+        return BaseResponse.successUtil("You're logged out");
+    }
+
+
+
+
 
 
 }

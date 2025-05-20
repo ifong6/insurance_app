@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostCreateRequest {
+public class FileParseRequest {
 
     @NotBlank
-    private String title;
+    private Integer id;
     @NotBlank
-    private String content;
+    private String claim_title;
     @NotBlank
-    private String author;
+    private String description;
 }

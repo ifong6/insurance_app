@@ -34,11 +34,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>jakarta.validation</groupId>-->
-<!--			<artifactId>jakarta.validation-api</artifactId>-->
-<!--			<version>3.0.2</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -84,12 +79,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- ===== UTILITY ===== -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-
 		<!-- ===== AWS CLOUD ===== -->
 		<!-- Spring Cloud AWS (Simplifies integration) -->
 		<dependency>
@@ -98,11 +87,16 @@
 			<version>3.0.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>5.7.1</version>
+		</dependency>
+
 		<!-- ===== DEVELOPMENT TOOLS ===== -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.38</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -113,10 +107,26 @@
 			<scope>test</scope>
 			<!-- Includes JUnit, Mockito, Spring Test, etc. -->
 		</dependency>
+
+		<!-- RestAssured for API Testing -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.3.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- JSON Parsing (Gson) -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version>
+		</dependency>
 	</dependencies>
 
 	<!-- ========== BUILD CONFIGURATION ========== -->
 	<build>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+
 		<plugins>
 			<!-- Lombok's annotation processor -->
 			<plugin>
@@ -149,19 +159,6 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.springframework.boot</groupId>-->
-<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--				<configuration>-->
-<!--					<excludes>-->
-<!--						<exclude>-->
-<!--							<groupId>org.projectlombok</groupId>-->
-<!--							<artifactId>lombok</artifactId>-->
-<!--						</exclude>-->
-<!--					</excludes>-->
-<!--				</configuration>-->
-<!--			</plugin>-->
-
 		</plugins>
 	</build>
 

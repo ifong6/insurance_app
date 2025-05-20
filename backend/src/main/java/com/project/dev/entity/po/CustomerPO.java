@@ -49,6 +49,7 @@ public class CustomerPO {
 
     private String updatedAt;
 
-    private String token;
-
+    /*
+        private String token;  // take care by client side
+    */
 }

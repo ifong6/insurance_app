@@ -1,4 +1,4 @@
-package com.project.dev.service.interfaces;
+package com.project.dev.service;
 
 import com.project.dev.entity.request.PostCreateRequest;
 import com.project.dev.entity.request.PostUpdateRequest;
@@ -35,7 +35,7 @@ public interface IPostService {
      * @return The found post
      * @throws PostException If post not found
      */
-    PostVO getPostById(Long id) throws PostException;
+//    PostVO getPostById(Long id) throws PostException;
 
     /**
      * Gets all posts (filtered by visibility based on permissions).

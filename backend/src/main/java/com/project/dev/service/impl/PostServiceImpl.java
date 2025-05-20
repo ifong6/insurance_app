@@ -7,14 +7,16 @@ import com.project.dev.entity.vo.PostVO;
 import com.project.dev.exceptions.ExceptionEnum;
 import com.project.dev.exceptions.PostException;
 import com.project.dev.repository.PostRepository;
-import com.project.dev.service.interfaces.IPostService;
+import com.project.dev.service.IPostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +52,7 @@ public class PostServiceImpl implements IPostService {
                 .getAuthentication()
                 .getName();
 
-        // 3. Check if current user is the post owner
+        // 3. Check if the current user is the post owner
         if (!post.getAuthor().equals(currentUsername)) {
             throw new PostException(ExceptionEnum.UNAUTHORIZED_EDIT);
         }
@@ -67,16 +69,26 @@ public class PostServiceImpl implements IPostService {
         return convertToVO(updatedPost);
     }
 
-    @Override
-    public PostVO getPostById(Long id) throws PostException {
-        PostPO post = postRepository.findById(id)
-                .orElseThrow(() -> new PostException(ExceptionEnum.POST_NOT_FOUND));
-        return convertToVO(post);  // Fixed typo in method name (V0 -> VO)
-    }
+//    @Override
+//    public PostVO getPostById(Long id) throws PostException {
+//        PostVO post = postRepository.findById(id);
+//        if (post == null){
+//            throw new PostException(ExceptionEnum.POST_NOT_FOUND);
+//        }
+//
+//
+//        return convertToVO(post);  // Fixed typo in method name (V0 -> VO)
+//    }
 
     @Override
     public List<PostVO> getAllPosts() {
-        return postRepository.findAll().stream()  // Fixed stream operation
+        List<PostPO> allPosts = postRepository.findAll();
+        if (allPosts == null){
+//            return List.of();
+            return Collections.emptyList();  // Fixed null check
+        }
+
+        return allPosts.stream()  // Fixed stream operation
                 .map(this::convertToVO)
                 .collect(Collectors.toList());
     }

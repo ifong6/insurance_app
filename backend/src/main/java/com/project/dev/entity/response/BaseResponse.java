@@ -23,4 +23,31 @@ public class BaseResponse<T> {
         this.body = body;
         this.timestamp = LocalDateTime.now();
     }
+
+    /*
+        static: return實類
+     */
+    public static <T> BaseResponse<T> success(T object) {
+        return new BaseResponse<>(
+                StatusEnum.CREATED.getCode(),
+                StatusEnum.CREATED.getMessage(),
+                "",
+                object
+        );
+    }
+
+    public static <T> BaseResponse<T> ok(T object) {
+        return new BaseResponse<>(
+                StatusEnum.OK.getCode(),
+                StatusEnum.OK.getMessage(),
+                "",
+                object
+        );
+    }
+
+    public static String successUtil(String message) {
+        return message;
+    }
+
+
 }

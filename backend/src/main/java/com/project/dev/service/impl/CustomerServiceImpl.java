@@ -5,12 +5,9 @@ import com.project.dev.entity.request.UserLoginRequest;
 import com.project.dev.entity.request.UserRegisterRequest;
 import com.project.dev.entity.vo.SessionCustomerVO;
 import com.project.dev.exceptions.ExceptionEnum;
-import com.project.dev.exceptions.BaseException;
 import com.project.dev.exceptions.UserException;
 import com.project.dev.repository.CustomerRepository;
-import com.project.dev.service.interfaces.ICustomerService;
-import com.project.dev.utility.JwtUtil;
-import jakarta.transaction.Transactional;
+import com.project.dev.service.ICustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +19,12 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements ICustomerService {
 
+    @Autowired
     private CustomerRepository customerRepository;
-    private JwtUtil jwtUtil;
+    @Autowired
+    private UtilService utilService;
 
     @Override
-    @Transactional
     public SessionCustomerVO signUp(UserRegisterRequest request) throws UserException {
         validateEmailUniqueness(request.getEmail());
 
@@ -34,6 +32,19 @@ public class CustomerServiceImpl implements ICustomerService {
         CustomerPO savedCustomer = customerRepository.save(newCustomer);
 
         return convertToVO(savedCustomer);
+    }
+
+    @Override
+    public SessionCustomerVO logIn(UserLoginRequest request) throws UserException {
+        if (UtilService.emailIsValid(request.getEmail())) {
+            CustomerPO existingCustomer = customerRepository.findByEmail(request.getEmail());
+
+            UtilService.passwordValidation(request.getPassword(), existingCustomer.getPassword());
+
+            return convertToVO(existingCustomer);
+        }
+
+        return null;
     }
 
     // Helper method 1: Convert UserRegisterRequest to CustomerPO
@@ -48,7 +59,7 @@ public class CustomerServiceImpl implements ICustomerService {
     // Helper method 2: Convert CustomerPO to SessionCustomerVO
     private SessionCustomerVO convertToVO(CustomerPO customerPO) {
         SessionCustomerVO vo = new SessionCustomerVO();
-        BeanUtils.copyProperties(customerPO, vo);
+        BeanUtils.copyProperties(vo, customerPO);
         // Add any other field mappings or transformations here
         return vo;
     }
@@ -60,52 +71,7 @@ public class CustomerServiceImpl implements ICustomerService {
         }
     }
 
-    @Override
-    @Transactional
-    public CustomerPO logIn(UserLoginRequest request) throws BaseException {
-        if (emailIsValid(request.getEmail())) {
-            CustomerPO existingCustomer = customerRepository.findByEmail(request.getEmail());
 
-            passwordValidation(request.getPassword(), existingCustomer.getPassword());
-
-            // 3. Generate JWT token using email as the subject
-            String newToken = JwtUtil.generateToken(existingCustomer.getEmail());
-
-            // 4. Attach the token to the user object (optional, could also return it directly)
-            existingCustomer.setToken(newToken);
-
-            return existingCustomer;
-        }
-        return null;
-    }
-
-    private boolean emailIsValid(String email) throws BaseException {
-        if (email == null || email.isEmpty()){
-            throw new UserException(ExceptionEnum.EMAIL_NOT_PROVIDED);
-        }
-
-        if (!formatIsValid(email)) {
-            throw new UserException(ExceptionEnum.EMAIL_NOT_VALID);
-        }
-
-        return true;
-    }
-
-    private void passwordValidation(String password, String existingPassword) throws BaseException {
-        if (password == null || password.isEmpty()) {
-            throw new UserException(ExceptionEnum.PASSWORD_NOT_PROVIDED);
-        }
-
-        if (!password.equals(existingPassword)){
-            throw new UserException(ExceptionEnum.PASSWORD_NOT_VALID);
-        }
-    }
-
-    private boolean formatIsValid (String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-        return email.matches(emailRegex);
-    }
 }
 
 
